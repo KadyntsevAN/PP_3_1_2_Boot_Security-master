@@ -47,8 +47,6 @@
             <th>NAME</th>
             <th>AGE</th>
             <th>EMAIL</th>
-            <th>PASSWORD</th>
-            <th>ROLES</th>
             <th>SELECT</th>
             <th>UPDATE</th>
             <th>DELETE</th>
@@ -61,9 +59,6 @@
             </td>
             <td th:text="${user.getAge()}">Age</td>
             <td th:text="${user.getEmail()}">Email</td>
-            <td th:text="${user.getPass()}">Password</td>
-            <td th:text="${user.getRoles()}">Roles</td>
-
             <td>
                 <a th:href="@{'/user?id=' + ${user.getId()}}">
                     <button>SELECT</button>

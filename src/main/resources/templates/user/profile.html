@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>HOME</title>
+    <title>ID USER</title>
     <style>
         div {
             width: 80%;
@@ -32,14 +32,10 @@
 </head>
 <body>
 <div>
-    <a th:href="@{'/'}">
+    <a th:href="@{'/user'}">
         <button>HOME</button>
     </a>
-    <a th:href="@{'/new'}">
-        <button>ADD USER</button>
-    </a>
 </div>
-
 <div>
     <table>
         <thead>
@@ -47,41 +43,19 @@
             <th>NAME</th>
             <th>AGE</th>
             <th>EMAIL</th>
-            <th>PASSWORD</th>
             <th>ROLES</th>
-            <th>SELECT</th>
-            <th>UPDATE</th>
-            <th>DELETE</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${users}">
-            <td>
-                <a th:text="${user.getName()}">Name</a>
-            </td>
+        <tr>
+            <td th:text="${user.getName()}">Name</td>
             <td th:text="${user.getAge()}">Age</td>
             <td th:text="${user.getEmail()}">Email</td>
-            <td th:text="${user.getPass()}">Password</td>
             <td th:text="${user.getRoles()}">Roles</td>
-
-            <td>
-                <a th:href="@{'/user?id=' + ${user.getId()}}">
-                    <button>SELECT</button>
-                </a>
-            </td>
-            <td>
-                <a th:href="@{'/user/edit?id=' + ${user.getId()}}">
-                    <button>UPDATE</button>
-                </a>
-            </td>
-            <td>
-                <a th:href="@{'/user/delete?id=' + ${user.getId()}}">
-                    <button>DELETE</button>
-                </a>
-            </td>
         </tr>
         </tbody>
     </table>
 </div>
+
 </body>
 </html>

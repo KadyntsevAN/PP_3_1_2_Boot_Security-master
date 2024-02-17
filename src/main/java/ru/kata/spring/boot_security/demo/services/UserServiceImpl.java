@@ -1,29 +1,54 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
+    private final PasswordEncoder bCryptPasswordEncoder;
+
+    private final RoleDao roleDao;
     private final UserDao userDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(@Lazy PasswordEncoder bCryptPasswordEncoder, RoleDao roleDao, UserDao userDao) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleDao = roleDao;
         this.userDao = userDao;
     }
 
     @Transactional
     @Override
-    public void save(User user) {
+    public void save(User user, String[] roleNames) {
+        user.setPass(bCryptPasswordEncoder.encode(user.getPassword()));
+//        Set<Role> rolesSet = new HashSet<>();
+//        for (String roleName : roleNames) {
+//            Role role = roleDao.find(roleName);
+//            if (role == null) {
+//                role = new Role(roleName);
+//                roleDao.save(role);
+//            }
+//            rolesSet.add(role);
+//        }
+//        user.setRoles(rolesSet);
         userDao.save(user);
-    }
 
+    }
 
     @Override
     public List<User> show() {
@@ -42,9 +67,22 @@ public class UserServiceImpl implements UserService {
         userDao.update(id, updateUser);
     }
 
-
     @Override
     public User find(int id) {
         return userDao.find(id);
+    }
+
+    @Override
+    public User find(String name) {
+        return userDao.find(name);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        User user = userDao.find(name);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User %s not found :", name));
+        }
+        return user;
     }
 }

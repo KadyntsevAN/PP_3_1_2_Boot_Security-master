@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.dao;
 
-
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.models.User;
 
@@ -33,14 +32,27 @@ public class UserDaoImpl implements UserDao {
             entityManager.remove(userToDelete);
         }
     }
+
     @Override
     public void update(int id, User updateUser) {
         if (find(id) != null) {
             entityManager.merge(updateUser);
         }
     }
+
     @Override
     public User find(int id) {
         return entityManager.find(User.class, id);
+    }
+
+    @Override
+    public User find(String name) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.name = :name", User.class);
+        query.setParameter("name", name);
+        try {
+            return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
