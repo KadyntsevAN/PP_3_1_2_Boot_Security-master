@@ -36,16 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void save(User user, String[] rolesNames) {
         user.setPass(bCryptPasswordEncoder.encode(user.getPassword()));
-        Set<Role> rolesSet = new HashSet<>();
-        for (String roleName : rolesNames) {
-            Role role = roleDao.find(roleName);
-            if (role == null) {
-                role = new Role(roleName);
-                roleDao.save(role);
-            }
-            rolesSet.add(role);
-        }
-        user.setRoles(rolesSet);
+        setUserRoles(user, rolesNames);
         userDao.save(user);
 
     }
@@ -65,6 +56,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(int id, User updateUser,String[] rolesNames) {
         User currentUser = userDao.find(id);
+        setUserRoles(updateUser, rolesNames);
+        updateUser.setPass(currentUser.getPass());
+        userDao.update(id, updateUser);
+    }
+
+    private void setUserRoles(User user, String[] rolesNames) {
         Set<Role> rolesSet = new HashSet<>();
         for (String roleName : rolesNames) {
             Role role = roleDao.find(roleName);
@@ -74,9 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
             rolesSet.add(role);
         }
-        updateUser.setRoles(rolesSet);
-        updateUser.setPass(currentUser.getPass());
-        userDao.update(id, updateUser);
+        user.setRoles(rolesSet);
     }
 
     @Override
