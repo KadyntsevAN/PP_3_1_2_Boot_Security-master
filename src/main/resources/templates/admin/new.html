@@ -31,20 +31,29 @@
     </style>
 </head>
 <body>
-<div>
-    <a th:href="@{'/'}">
-        <button>HOME</button>
-    </a>
+<div style="display: flex; justify-content: space-between;">
+    <div style="text-align: left;">
+        <a th:href="@{'/admin'}">
+            <button>HOME</button>
+        </a>
+    </div>
+    <div style="text-align: right;">
+        <a th:href="@{'/logout'}">
+            <button>LOGOUT</button>
+        </a>
+    </div>
 </div>
 <div>
     <div>
-        <form th:action="@{'/'}" method="POST" th:object="${user}">
+        <form th:action="@{'/admin'}" method="POST" th:object="${user}">
             <table>
                 <thead>
                 <tr>
                     <th>NAME</th>
                     <th>AGE</th>
                     <th>EMAIL</th>
+                    <th>PASSWORD</th>
+                    <th>ROLES</th>
                     <th>ADD</th>
                 </tr>
                 </thead>
@@ -66,6 +75,17 @@
                         <input type="text" th:field="*{email}" id="email">
                         <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error email</div>
                     </td>
+                    <td>
+                        <label for="pass">ENTER PASSWORD</label>
+                        <input type="text" th:field="*{pass}" id="pass">
+                    </td>
+                    <td>
+                        <label for="user">USER</label><br>
+                        <input type="checkbox" th:field="*{roles}" id="user" value="ROLE_USER">
+                        <label for="admin">ADMIN</label><br>
+                        <input type="checkbox" th:field="*{roles}" id="admin" value="ROLE_ADMIN">
+                    </td>
+
                     <td><button type="submit">ADD</button></td>
                 </tr>
                 </tbody>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
@@ -31,13 +31,21 @@
     </style>
 </head>
 <body>
-<div>
-    <a th:href="@{'/'}">
-        <button>HOME</button>
-    </a>
-    <a th:href="@{'/new'}">
-        <button>ADD USER</button>
-    </a>
+
+<div style="display: flex; justify-content: space-between;">
+    <div style="text-align: left;">
+        <a th:href="@{'/admin'}">
+            <button>HOME</button>
+        </a>
+        <a th:href="@{'/admin/new'}">
+            <button>ADD USER</button>
+        </a>
+    </div>
+    <div style="text-align: right;">
+        <a th:href="@{'/logout'}">
+            <button>LOGOUT</button>
+        </a>
+    </div>
 </div>
 
 <div>
@@ -47,6 +55,8 @@
             <th>NAME</th>
             <th>AGE</th>
             <th>EMAIL</th>
+            <th>PASSWORD</th>
+            <th>ROLES</th>
             <th>SELECT</th>
             <th>UPDATE</th>
             <th>DELETE</th>
@@ -59,18 +69,21 @@
             </td>
             <td th:text="${user.getAge()}">Age</td>
             <td th:text="${user.getEmail()}">Email</td>
+            <td th:text="${user.getPass()}">Password</td>
+            <td th:text="${user.getRoles()}">Roles</td>
+
             <td>
-                <a th:href="@{'/user?id=' + ${user.getId()}}">
+                <a th:href="@{'/admin/user?id=' + ${user.getId()}}">
                     <button>SELECT</button>
                 </a>
             </td>
             <td>
-                <a th:href="@{'/user/edit?id=' + ${user.getId()}}">
+                <a th:href="@{'/admin/user/edit?id=' + ${user.getId()}}">
                     <button>UPDATE</button>
                 </a>
             </td>
             <td>
-                <a th:href="@{'/user/delete?id=' + ${user.getId()}}">
+                <a th:href="@{'/admin/user/delete?id=' + ${user.getId()}}">
                     <button>DELETE</button>
                 </a>
             </td>

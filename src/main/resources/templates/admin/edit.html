@@ -31,21 +31,29 @@
     </style>
 </head>
 <body>
-<div>
-    <a th:href="@{'/'}">
-        <button>HOME</button>
-    </a>
+<div style="display: flex; justify-content: space-between;">
+    <div style="text-align: left;">
+        <a th:href="@{'/admin'}">
+            <button>HOME</button>
+        </a>
+    </div>
+    <div style="text-align: right;">
+        <a th:href="@{'/logout'}">
+            <button>LOGOUT</button>
+        </a>
+    </div>
 </div>
 <div>
     <div>
-        <form th:action="@{'/user/edit?id=' + ${user.getId()}}" method="POST" th:object="${user}">
+        <form th:action="@{'/admin/user/edit?id=' + ${user.getId()}}" method="POST" th:object="${user}">
             <table>
                 <thead>
                 <tr>
                     <th>NAME</th>
                     <th>AGE</th>
                     <th>EMAIL</th>
-                    <th>ADD</th>
+                    <th>ROLES</th>
+                    <th>UPDATE</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -56,16 +64,26 @@
                         <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error name</div>
                     </td>
                     <td>
-                        <label for="name">ENTER AGE</label>
+                        <label for="age">ENTER AGE</label>
                         <input type="text" th:field="*{age}" id="age">
                         <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error age</div>
                     </td>
                     <td>
-                        <label for="name">ENTER EMAIL</label>
+                        <label for="email">ENTER EMAIL</label>
                         <input type="text" th:field="*{email}" id="email">
-                        <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error email</div>
+                        <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error email
+                        </div>
                     </td>
-                    <td><button type="submit">UPDATE</button></td>
+                    <td>
+                    <label for="user">USER</label><br>
+                    <input type="checkbox" th:field="*{roles}" id="user" value="ROLE_USER">
+                    <label for="admin">ADMIN</label><br>
+                    <input type="checkbox" th:field="*{roles}" id="admin" value="ROLE_ADMIN">
+                    </td>
+
+                    <td>
+                        <button type="submit">UPDATE</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
