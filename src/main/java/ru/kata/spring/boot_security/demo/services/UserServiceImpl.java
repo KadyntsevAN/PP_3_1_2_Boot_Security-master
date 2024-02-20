@@ -84,12 +84,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userDao.find(name);
     }
 
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         User user = userDao.find(name);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User %s not found :", name));
         }
-        return user;
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                user.getRoles());
     }
 }
