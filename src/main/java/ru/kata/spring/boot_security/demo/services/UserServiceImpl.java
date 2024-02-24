@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Transactional(readOnly = true)
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -39,9 +38,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPass(bCryptPasswordEncoder.encode(user.getPassword()));
         setUserRoles(user, rolesNames);
         userDao.save(user);
-
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<User> show() {
         return userDao.show();
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Transactional
     @Override
-    public void update(int id, User updateUser,String[] rolesNames) {
+    public void update(int id, User updateUser, String[] rolesNames) {
         User currentUser = userDao.find(id);
         setUserRoles(updateUser, rolesNames);
         updateUser.setPass(currentUser.getPass());
@@ -75,19 +74,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setRoles(rolesSet);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User find(int id) {
         return userDao.find(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User find(String name) {
         return userDao.find(name);
     }
 
+
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userDao.find(name);
+        User user = userDao.joinFetch(userDao.find(name));
+
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User %s not found :", name));
         }

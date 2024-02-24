@@ -14,5 +14,7 @@ public interface UserDao {
     User find(int id);
     User find(String name);
 
+    User joinFetch(User user);
+
 
 }

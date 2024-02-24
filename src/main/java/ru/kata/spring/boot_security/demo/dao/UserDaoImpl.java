@@ -55,4 +55,16 @@ public class UserDaoImpl implements UserDao {
             return null;
         }
     }
+
+    @Override
+    public User joinFetch(User user) {
+        TypedQuery<User> query = entityManager.createQuery(
+                "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id = :userId", User.class);
+        query.setParameter("userId", user.getId());
+        try {
+            return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
